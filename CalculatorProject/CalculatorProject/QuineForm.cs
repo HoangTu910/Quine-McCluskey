@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -169,7 +169,7 @@ namespace CalculatorProject
             if(countBit == 1)
             {
                 countTest = 1;
-                QuineVariables.findBinaryList.Add(tempBinary);
+                QuineVariables.findBinaryList.Add(new StringBuilder(tempBinary.ToString()));
                 QuineVariables.findNumList.Add(num1 +',' + num2);
                 //printList(QuineVariables.findBinaryList);
                 return true;
@@ -268,7 +268,7 @@ namespace CalculatorProject
             
             while (countStep < stepTime)
             {
-                for (int i = 0; i < QuineVariables.binaryList.Count-1; i++)
+                for (int i = 0; i < QuineVariables.binaryList.Count; i++)
                 {
                     int countMinimal = 0;
                     for (int j = i + 1; j < QuineVariables.binaryList.Count; j++)
@@ -295,25 +295,42 @@ namespace CalculatorProject
                     }
 
                 }
+
                 QuineVariables.binaryList.Clear();
                 QuineVariables.numbersList.Clear();
-                QuineVariables.binaryList.AddRange(QuineVariables.findBinaryList.Select(sb => sb.ToString()).ToList());
-                QuineVariables.numbersList.AddRange(QuineVariables.findNumList.Select(sb => sb.ToString()).ToList());
+
+                for (int i = 0; i < QuineVariables.findBinaryList.Count; i++)
+                {
+                    string binaryString = QuineVariables.findBinaryList[i].ToString();
+                    string numString = QuineVariables.findNumList[i].ToString();
+
+                    if (!QuineVariables.binaryList.Contains(binaryString))
+                    {
+                        QuineVariables.binaryList.Add(binaryString);
+                        QuineVariables.numbersList.Add(numString);
+                    }
+                }
+
                 QuineVariables.findBinaryList.Clear();
                 QuineVariables.findNumList.Clear();
                 countStep++;
                 
             }
+            
+
             //QuineVariables.minimalList = QuineVariables.minimalList.Distinct().ToList();
-            removeDuplicate(QuineVariables.binaryList);
-            removeDuplicate(QuineVariables.numbersList);
+            //removeDuplicate(QuineVariables.binaryList);
+            //removeDuplicate(QuineVariables.numbersList);
             QuineVariables.binaryList.AddRange(QuineVariables.minimalList);
             QuineVariables.numbersList.AddRange(QuineVariables.minimalNumList);
             //testing();
             getLogicFormula(QuineVariables.binaryList, QuineVariables.variablesList);
             compareColumns(QuineVariables.numbersList);
             QuineVariables.formulaList = QuineVariables.formulaList.Distinct().ToList();
-
+            //for (int i = 0; i < QuineVariables.numbersList.Count(); i++)
+            //{
+            //    MessageBox.Show("TEST: " + QuineVariables.numbersList[i].ToString());
+            //}
             //for (int i = 0; i < QuineVariables.compareList.Count(); i++)
             //{
             //    MessageBox.Show("TEST: " + QuineVariables.compareList[i].ToString());
@@ -333,6 +350,7 @@ namespace CalculatorProject
                 //}
                 //numParts.Clear();
                 string[] substrings = QuineVariables.numbersList[i].Split(',');
+
                 List<String> splitValues = new List<string>(substrings);
 
                 if (splitValues.Contains(QuineVariables.compareList[index]))
@@ -342,20 +360,18 @@ namespace CalculatorProject
                     index++;
                 }
                 splitValues.Clear();
+
             }
-            //for (int i = 0; i < QuineVariables.numbersList.Count(); i++)
+            //for (int i = 0; i < QuineVariables.formulaList.Count(); i++)
             //{
-            //    MessageBox.Show(QuineVariables.numbersList[i].ToString());
+            //    MessageBox.Show(QuineVariables.formulaList[i].ToString());
             //}
             for (int i = 0; i < QuineVariables.resultList.Count(); i++)
             {
                 MessageBox.Show(QuineVariables.resultList[i].ToString());
             }
             //testing();
-
-
         }
-
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
 
