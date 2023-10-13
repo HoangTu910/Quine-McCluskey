@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -28,5 +28,7 @@ namespace CalculatorProject
         public static List<String> formulaList = new List<string>();
         public static List<String> compareList = new List<string>();
         public static List<String> resultList = new List<string>();
+        public static List<String> mintermList = new List<string>();
+        public static List<String> mintermNumList = new List<string>();
     }
 }
