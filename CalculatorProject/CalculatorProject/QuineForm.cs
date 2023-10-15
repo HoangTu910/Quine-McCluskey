@@ -279,6 +279,10 @@ namespace CalculatorProject
                 {
                     QuineVariables.mintermNumList.Add(QuineVariables.numbersList[i]);
                 }
+                else if (QuineVariables.mintermList.Count == 1)
+                {
+                    QuineVariables.mintermNumList.Add(QuineVariables.numbersList[i]);
+                }
             }
         }
 
@@ -403,7 +407,7 @@ namespace CalculatorProject
                 {
                     QuineVariables.resultList.Add(QuineVariables.formulaList[i]);
                     indexFormulaList.Add(i);
-                    MessageBox.Show("NUMBER: " + QuineVariables.numbersList[i].ToString());
+                    //MessageBox.Show("NUMBER: " + QuineVariables.numbersList[i].ToString());
                     removePLS(QuineVariables.numbersList[i]);
                     //for(int j = 0; j < QuineVariables.mintermList.Count; j++)
                     //{
@@ -414,7 +418,7 @@ namespace CalculatorProject
                 splitValues.Clear();
             }
             int loopC = 0;
-
+            int isOnce = 0;
             for(int i = 0; i < QuineVariables.numbersList.Count; i++)
             {
                 int countMintermNum = 0;
@@ -424,31 +428,43 @@ namespace CalculatorProject
                 {
                     if (QuineVariables.mintermList.Contains(splitValues[j]))
                     {
+                        isOnce = 1;
                         countMintermNum++;
                     }
                 }
-                if(countMintermNum == splitValues.Count)
+                if(isOnce == 1 && QuineVariables.mintermList.Count == 1)
+                {
+                    QuineVariables.mintermNumList.Add(QuineVariables.numbersList[i]);
+                }
+
+                else if(countMintermNum == splitValues.Count)
                 {
                     QuineVariables.mintermNumList.Add(QuineVariables.numbersList[i]); 
                 }
 
             }
             int indexMintermList = 0;
+            for (int m = 0; m < QuineVariables.mintermList.Count(); m++)
+            {
+
+                //MessageBox.Show("MINTERM-NUM: " + QuineVariables.mintermList[m].ToString());
+
+            }
             while (QuineVariables.mintermList.Count != 0) {
                 checkMinTermNumList();
-                MessageBox.Show("COUNT: " + QuineVariables.mintermList.Count.ToString());
-                for (int m = 0; m < QuineVariables.mintermNumList.Count(); m++)
-                {
+                //MessageBox.Show("COUNT: " + QuineVariables.mintermList.Count.ToString());
+                //for (int m = 0; m < QuineVariables.mintermNumList.Count(); m++)
+                //{
 
-                    MessageBox.Show("MINTERM-NUM: " + QuineVariables.mintermNumList[m].ToString());
+                //    MessageBox.Show("MINTERM-NUM: " + QuineVariables.mintermNumList[m].ToString());
 
-                }
+                //}
 
                 if (QuineVariables.mintermNumList.Count >= 1)
                 {
                     string[] substrings = QuineVariables.mintermNumList[0].Split(',');
                     List<string> splitValues = new List<string>(substrings);
-
+                    MessageBox.Show(QuineVariables.mintermNumList[0]);
                     //if (indexPosMinTerm < QuineVariables.mintermList.Count)
                     //{
                     //    if (splitValues.Contains(QuineVariables.mintermList[indexPosMinTerm]))
@@ -460,18 +476,18 @@ namespace CalculatorProject
                     //}
                     if (QuineVariables.mintermList.Count >= 1)
                     {
-                        MessageBox.Show("IF 1");
-                        MessageBox.Show("MINTERMLIST: " + QuineVariables.mintermList[0]);
+                        //MessageBox.Show("IF 1");
+                        //MessageBox.Show("MINTERMLIST: " + QuineVariables.mintermList[0]);
                         try
                         {
                             if (splitValues.Contains(QuineVariables.mintermList[indexMintermList]))
                             {
-                                MessageBox.Show("IF 2");
+                                //MessageBox.Show("IF 2");
                                 for (int i = 0; i < QuineVariables.numbersList.Count; i++)
                                 {
                                     if (QuineVariables.mintermNumList[0].Equals(QuineVariables.numbersList[i]))
                                     {
-                                        MessageBox.Show("NUMBER: IN");
+                                        //MessageBox.Show("NUMBER: IN");
                                         QuineVariables.resultList.Add(QuineVariables.formulaList[i]);
                                         QuineVariables.mintermList.RemoveAll(x => splitValues.Contains(x));
                                         for (int m = 0; m < QuineVariables.mintermList.Count(); m++)
@@ -496,7 +512,7 @@ namespace CalculatorProject
                 }
                 else { break; }
                 QuineVariables.mintermNumList.Clear();
-            }
+            } 
             //NUMBERLIST PHAI CHUA MINTERM, KHONG DUOC CHUA SO KHONG PHAI MINTERM
 
 
