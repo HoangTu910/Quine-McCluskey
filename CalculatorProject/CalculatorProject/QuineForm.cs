@@ -212,7 +212,7 @@ namespace CalculatorProject
                     }
                     else if (binaryList[i][j].Equals('0'))
                     {
-                        formula = formula + varList[j] + '`';
+                        formula = formula + varList[j] + "\'";
                     }
                     else
                     {
@@ -260,32 +260,100 @@ namespace CalculatorProject
             QuineVariables.mintermList.RemoveAll(x => elementsToRemove.Contains(x));
         }
 
+        private string compareToGetMintermNumList(List<String> listToCompare)
+        {
+            List<int> containCount = new List<int>();
+            for(int i = 0; i < listToCompare.Count; i++)
+            {
+                int count = 0;
+                for(int j = 0; j < QuineVariables.mintermList.Count; j++)
+                {
+                    if (listToCompare[i].Contains(QuineVariables.mintermList[j]))
+                    {
+                        count++;
+                    }
+                }
+                containCount.Add(count);    
+            }
+
+            int max = containCount.Max();
+            int index = containCount.FindIndex(x => x == max);
+
+            return listToCompare[index];
+        }
         private void checkMinTermNumList()
         {
             //QuineVariables.mintermNumList.Clear();
-            for (int i = 0; i < QuineVariables.numbersList.Count; i++)
+            List<String> copyMintermList = new List<String>(QuineVariables.mintermList);
+            List<String> listToCompare = new List<String>();
+            for(int i = 0; i < copyMintermList.Count; i++)
             {
-                int countMintermNum = 0;
-                string[] substrings = QuineVariables.numbersList[i].Split(',');
-                List<string> splitValues = new List<string>(substrings);
-                for (int j = 0; j < splitValues.Count; j++)
+                for (int j = 0; j < QuineVariables.numbersList.Count; j++)
                 {
-                    if (QuineVariables.mintermList.Contains(splitValues[j]))
-                    {
-                        countMintermNum++;
+                    if (QuineVariables.numbersList[j].Contains(copyMintermList[i])){
+                        listToCompare.Add(QuineVariables.numbersList[j]);
                     }
                 }
-                if (countMintermNum == splitValues.Count)
-                {
-                    QuineVariables.mintermNumList.Add(QuineVariables.numbersList[i]);
-                }
-                else if (QuineVariables.mintermList.Count == 1)
-                {
-                    QuineVariables.mintermNumList.Add(QuineVariables.numbersList[i]);
-                }
+                String listToRemove = compareToGetMintermNumList(listToCompare);
+                QuineVariables.mintermNumList.Add(compareToGetMintermNumList(listToCompare));
+                string[] substrings = listToRemove.Split(',');
+                List<string> splitValues = new List<string>(substrings);
+                copyMintermList.RemoveAll(x => splitValues.Contains(x));
             }
+
+
+            //for (int i = 0; i < QuineVariables.numbersList.Count; i++)
+            //{
+            //    int countMintermNum = 0;
+            //    string[] substrings = QuineVariables.numbersList[i].Split(',');
+            //    List<string> splitValues = new List<string>(substrings);
+            //    for (int j = 0; j < splitValues.Count; j++)
+            //    {
+            //        if (QuineVariables.mintermList.Contains(splitValues[j]))
+            //        {
+            //            countMintermNum++;
+            //        }
+            //    }
+            //    if (countMintermNum == splitValues.Count)
+            //    {
+            //        QuineVariables.mintermNumList.Add(QuineVariables.numbersList[i]);
+            //    }
+            //    else if (QuineVariables.mintermList.Count == 1)
+            //    {
+            //        QuineVariables.mintermNumList.Add(QuineVariables.numbersList[i]);
+            //    }
+            //}
+            //FIX MINTERM NUM LIST O DAY DE THOA TEST CASE 8 BIEN
         }
 
+        private bool checkUserInput()
+        {
+            bool condition = true;
+
+            for (int i = 0; i < QuineVariables.numbersList.Count; i++)
+            {
+                try
+                {
+                    if (int.Parse(QuineVariables.numbersList[i]) > Math.Pow(2, QuineVariables.numbersList.Count))
+                    {
+                        condition = false;
+                    }
+                }
+                catch
+                {
+                    return false;
+                }
+            }
+
+            if (condition == false)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
        
         private void label1_Click(object sender, EventArgs e)
         {
@@ -308,9 +376,17 @@ namespace CalculatorProject
         {
             int countStep = 0;
             int stepTime = 3;
-
             QuineVariables.numbersList = textBox2.Text.Split(',').ToList();
             QuineVariables.variablesList = textBox1.Text.Split(',').ToList();
+            if (!checkUserInput())
+            {
+                MessageBox.Show("Incorrect Input ! Please Try Again");
+                textBox1.Clear();
+                textBox2.Clear();
+                QuineVariables.numbersList.Clear();
+                QuineVariables.variablesList.Clear();
+                return;
+            }
             upperAllElements(QuineVariables.variablesList);
             for(int i = 0; i < QuineVariables.numbersList.Count; i++)
             {
@@ -402,7 +478,6 @@ namespace CalculatorProject
                 //numParts.Clear();
                 string[] substrings = QuineVariables.numbersList[i].Split(',');
                 List<string> splitValues = new List<string>(substrings);
-
                 if (indexPos < QuineVariables.compareList.Count && splitValues.Contains(QuineVariables.compareList[indexPos]))
                 {
                     QuineVariables.resultList.Add(QuineVariables.formulaList[i]);
@@ -512,7 +587,7 @@ namespace CalculatorProject
                 }
                 else { break; }
                 QuineVariables.mintermNumList.Clear();
-            } 
+            }
             //NUMBERLIST PHAI CHUA MINTERM, KHONG DUOC CHUA SO KHONG PHAI MINTERM
 
 
@@ -520,10 +595,14 @@ namespace CalculatorProject
             //{
             //    MessageBox.Show(QuineVariables.numbersList[i].ToString());
             //}
-            for (int i = 0; i < QuineVariables.resultList.Count(); i++)
-            {
-                MessageBox.Show("MINTERM: " + QuineVariables.resultList[i].ToString());
-            }
+            //for (int i = 0; i < QuineVariables.resultList.Count(); i++)
+            //{
+            //    MessageBox.Show("MINTERM: " + QuineVariables.resultList[i].ToString());
+            //}
+            
+            Result resultQuineCalc = new Result();
+            resultQuineCalc.Show();
+            this.Hide();
             //testing();
         }
         private void textBox1_TextChanged(object sender, EventArgs e)
@@ -532,6 +611,16 @@ namespace CalculatorProject
         }
 
         private void textBox2_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void QuineForm_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label5_Click(object sender, EventArgs e)
         {
 
         }
