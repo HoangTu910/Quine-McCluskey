@@ -45,6 +45,6 @@ namespace CalculatorProject
             resultList.Clear();
             mintermList.Clear();
             mintermNumList.Clear();
-    }
+        }
     }
 }
