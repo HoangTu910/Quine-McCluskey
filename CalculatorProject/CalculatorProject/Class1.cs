@@ -30,5 +30,21 @@ namespace CalculatorProject
         public static List<String> resultList = new List<string>();
         public static List<String> mintermList = new List<string>();
         public static List<String> mintermNumList = new List<string>();
+
+        public void resetAllList()
+        {
+            binaryList.Clear();
+            variablesList.Clear();
+            numbersList.Clear();
+            findBinaryList.Clear();
+            findNumList.Clear();
+            minimalList.Clear();
+            minimalNumList.Clear();
+            formulaList.Clear();
+            compareList.Clear();
+            resultList.Clear();
+            mintermList.Clear();
+            mintermNumList.Clear();
+    }
     }
 }
